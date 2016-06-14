@@ -1,0 +1,6 @@
+# nodejs dependencies
+node_modules/
+
+# products
+build/
+
