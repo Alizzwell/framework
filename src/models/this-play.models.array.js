@@ -1,4 +1,4 @@
 ;(function (undefined) {
-	var models = "array";
+	'use strict';
 	
 }).call(this);
