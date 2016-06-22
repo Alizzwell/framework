@@ -3,6 +3,9 @@ module.exports = function (grunt) {
 		// Core
 		'src/this-play.core.js',
 
+		// classes
+		'src/models/this-play.classes.item.js',
+		
 		// models
 		'src/models/this-play.models.array.js',
 
