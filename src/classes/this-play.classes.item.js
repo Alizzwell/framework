@@ -5,36 +5,31 @@
 		throw 'this_play is not declared';
 	}
 	
-	var item = function () {
-		this.val = arguments[0];
-		this.color = arguments[1];
-		this.backgroundColor = arguments[2];
+	function Item() {
+		if (!(this instanceof Item)) {
+			return new Item();
+		}
 	};
 	
-	item.prototype.setValue = function (val) {
-		this.val = val;
+	Item.prototype.value = undefined;
+	Item.prototype.attributes = {};
+	
+	Item.prototype.getValue = function () {
+		return this.value;
 	};
 	
-	item.prototype.getValue = function () {
-		return this.val;
+	Item.prototype.setValue = function (value) {
+		this.value = value;
 	};
 	
-	item.prototype.setColor = function (color) {
-		this.color = color;
+	Item.prototype.getAttributes = function () {
+		return this.attributes;
 	};
 	
-	item.prototype.getColor = function () {
-		return this.color;
+	Item.prototype.setAttributes = function (attr) {
+		this.attributes = Object.assign(this.attributes, attr);
 	};
 	
-	item.prototype.setBackgroundColor = function (color) {
-		this.backgroundColor = color;
-	};
-	
-	item.prototype.getBackgroundColor = function () {
-		return this.backgroundColor;
-	};
-	
-	this_play.classes.item = item;
+	this_play.classes.Item = Item;
 	
 }).call(this);

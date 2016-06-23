@@ -3,7 +3,8 @@
 	
 	var this_play = {
 		classes: {},
-		models: {}
+		models: {},
+		controllers: {}
 	};
 	
 	this.this_play = this_play;
