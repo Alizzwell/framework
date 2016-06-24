@@ -11,8 +11,7 @@ QUnit.test("integer model get&set test", function (assert) {
 	assert.throws(function () {
 		model.setValue("string data");
 	}, function (err) {
-		// TODO: make custom error.
-		return err.message === "type error";
+		return err instanceof TypeError;
 	});
 	assert.ok(model.getValue() === 2);
 });
@@ -30,8 +29,7 @@ QUnit.test("bind integer model to controller test", function (assert) {
 	assert.throws(function () {
 		controller.update("string data");
 	}, function (err) {
-		// TODO: make custom error.
-		return err.message === "type error";
+		return err instanceof TypeError;
 	});
 	assert.ok(model.getValue() === 4);
 });
@@ -88,7 +86,76 @@ QUnit.test("model attributes get&set test", function (assert) {
 });
 
 
+QUnit.test("array data type test", function (assert) {
+	var model = this_play.models.toArray(
+		this_play.models.Integer, 3
+	);
+	
+	assert.ok(model.array.length === 3);
+	
+	assert.ok(model.array[0].getValue() === 0)
+	assert.ok(model.array[1].getValue() === 0)
+	assert.ok(model.array[2].getValue() === 0)
+	assert.throws(function () {
+		model.array[3].getValue();
+	}, function (err) {
+		return err instanceof TypeError;
+	});
+});
 
+QUnit.test("bind array model to controller test", function (assert) {
+	var model = this_play.models.toArray(
+		this_play.models.Integer, 3
+	);
+	
+	var controller = this_play.controllers.create(model);
+	
+	controller.update([1, 2, 3]);
+	assert.ok(model.array[0].getValue() === 1);
+	assert.ok(model.array[1].getValue() === 2);
+	assert.ok(model.array[2].getValue() === 3);
+	
+	assert.throws(function () {
+		controller.update("string data");
+	}, function (err) {
+		return err instanceof TypeError;
+	});
+	
+	assert.ok(model.array[0].getValue() === 1);
+	assert.ok(model.array[1].getValue() === 2);
+	assert.ok(model.array[2].getValue() === 3);
+	
+	assert.throws(function () {
+		controller.update([2, 4, '6']);
+	}, function (err) {
+		return err instanceof TypeError;
+	});
+	
+	assert.ok(model.array[0].getValue() === 1);
+	assert.ok(model.array[1].getValue() === 2);
+	assert.ok(model.array[2].getValue() === 3);
+	
+	assert.throws(function () {
+		controller.update([3, 3]);
+	}, function (err) {
+		return err instanceof RangeError;
+	});
+	
+	assert.ok(model.array[0].getValue() === 1);
+	assert.ok(model.array[1].getValue() === 2);
+	assert.ok(model.array[2].getValue() === 3);
+	
+	assert.throws(function () {
+		controller.update([9, 8, 7, 6, 5, 4]);
+	}, function (err) {
+		return err instanceof RangeError;
+	});
+	
+	assert.ok(model.array[0].getValue() === 1);
+	assert.ok(model.array[1].getValue() === 2);
+	assert.ok(model.array[2].getValue() === 3);
+	
+});
 
 
 

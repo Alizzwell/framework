@@ -15,14 +15,15 @@
 	}
 	
 	Integer.prototype.item = undefined;
+	Integer.type = "number";
 	
 	Integer.prototype.getValue = function () {
 		return this.item.getValue();
 	}
 	
 	Integer.prototype.setValue = function (val) {
-		if (typeof val !== 'number') {
-			throw new Error('type error');
+		if (typeof val !== Integer.type) {
+			throw new TypeError('type error');
 		}
 		this.item.setValue(val);
 	}
