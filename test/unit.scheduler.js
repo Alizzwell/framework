@@ -1,6 +1,6 @@
 var jsonData = {
 	targets: [
-		{ name: "A", type: "integer", array: true, length: 3 },
+		{ name: "A", type: "integer", isArray: true, length: 3 },
 		{ name: "B", type: "integer" }
 	],
 	steps: [
@@ -14,9 +14,19 @@ var jsonData = {
 
 
 QUnit.module('unit.scheduler.js', function (hooks) {
-	
-	QUnit.test("scheduler step simple test", function (assert) {
-		 assert.ok(true);
+
+	QUnit.test("scheduler simple test", function (assert) {
+		var scheduler = new this_play.Scheduler();
+		scheduler.addTarget(jsonData.targets);
+
+		assert.ok(scheduler.targets['A']);
+		assert.ok(scheduler.targets['B']);
+
+		jsonData.steps.forEach(function (step) {
+			scheduler.step(step);
+			assert.deepEqual(scheduler.targets['A'].getValue(), step['A']);
+			assert.deepEqual(scheduler.targets['B'].getValue(), step['B']);
+		});
 	});
 	
 });

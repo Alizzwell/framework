@@ -20,6 +20,10 @@
 	Controller.prototype.on = function (event, callback) {
 		this.events[event] = callback;
 	};
+
+	Controller.prototype.getValue = function () {
+		return this.model.getValue();
+	};
 	
 	var ArrayController = function (model) {
 		Controller.apply(this, arguments);
@@ -47,6 +51,14 @@
 		}
 	};
 	
+	ArrayController.prototype.getValue = function () {
+		var retArray = [];
+		this.model.array.forEach(function (item) {
+			retArray.push(item.getValue());
+		});
+		return retArray;
+	};
+
 	var module = (function () {
 				
 		var create = function (model) {
