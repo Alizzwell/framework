@@ -11,10 +11,17 @@
 	};
 	
 	Controller.prototype.update = function (data) {
-		var before = this.model.getValue();
+		var before = this.getValue();
 		this.model.setValue(data);
-		var after = this.model.getValue();
-		if (this.events["update"]) this.events["update"](before, after);
+		var after = this.getValue();
+		
+		if (this.events["update"]) {
+			this.events["update"](before, after);
+		}
+		
+		if (this.events["change"] && before !== after) {
+			this.events["change"](before, after);
+		}
 	};
 	
 	Controller.prototype.on = function (event, callback) {
@@ -46,8 +53,18 @@
 			}
 		}
 		
+		var before = this.getValue();
 		for (var i = 0; i < data.length; i++) {
 			this.model.array[i].setValue(data[i]);
+		}
+		var after = this.getValue();
+		
+		if (this.events["update"]) {
+			this.events["update"](before, after);
+		}
+		
+		if (this.events["change"] && before !== after) {
+			this.events["change"](before, after);
 		}
 	};
 	

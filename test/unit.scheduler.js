@@ -29,6 +29,33 @@ QUnit.module('unit.scheduler.js', function (hooks) {
 		});
 	});
 	
+	QUnit.test("scheduler event listener test", function (assert) {
+		var scheduler = new this_play.Scheduler();
+		scheduler.addTarget(jsonData.targets);
+
+		assert.expect(18);
+		
+		scheduler.targets['A'].on('update', function (before, after) {
+			assert.ok(true, "update A " + after.toString());
+		});
+		
+		scheduler.targets['B'].on('update', function (before, after) {
+			assert.ok(true, "update B " + after.toString());
+		});
+		
+		scheduler.targets['A'].on('change', function (before, after) {
+			assert.notDeepEqual(before, after, before.toString() + " -> " + after.toString());
+		});
+		
+		scheduler.targets['B'].on('change', function (before, after) {
+			assert.notEqual(before, after, before + " -> " + after);
+		});
+		
+		jsonData.steps.forEach(function (step) {
+			scheduler.step(step);
+		});
+	});
+	
 });
 
 
