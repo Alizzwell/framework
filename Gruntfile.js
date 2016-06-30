@@ -4,13 +4,17 @@ module.exports = function (grunt) {
 		'src/this-play.core.js',
 
 		// classes
-		'src/models/this-play.classes.item.js',
+		'src/classes/this-play.classes.item.js',
 		
 		// models
-		'src/models/this-play.models.array.js',
+		'src/models/this-play.models.js',
+		'src/models/this-play.models.integer.js',
 
 		// controllers
-		'src/controllers/this-play.controllers.array.js'
+		'src/controllers/this-play.controllers.js',
+
+		// scheduler
+		'src/this-play.scheduler.js'
 	]
 
 	grunt.initConfig({
