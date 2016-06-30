@@ -27,7 +27,9 @@
 	};
 	
 	Item.prototype.setAttributes = function (attr) {
-		this.attributes = Object.assign(this.attributes, attr);
+		for (var name in attr) {
+			this.attributes[name] = attr[name];
+		}
 	};
 	
 	this_play.classes.Item = Item;
