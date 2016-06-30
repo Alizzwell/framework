@@ -65,7 +65,7 @@
 			this.events.update(before, after);
 		}
 		
-		if (this.events.change && before !== after) {
+		if (this.events.change && before.toString() !== after.toString()) {
 			this.events.change(before, after);
 		}
 	};
