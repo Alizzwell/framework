@@ -30,6 +30,11 @@
 		}
 
 		this.targets[target.name] = this_play.controllers.create(model);
+
+		if (target.init) {
+			this.targets[target.name].update(target.init);
+		}
+		
 	};
 
 	Scheduler.prototype.step = function (step) {
