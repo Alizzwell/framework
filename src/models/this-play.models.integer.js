@@ -12,29 +12,29 @@
 			color: 'black',
 			background: 'white'
 		});
-	}
+	};
 	
 	Integer.prototype.item = undefined;
 	Integer.type = "number";
 	
 	Integer.prototype.getValue = function () {
 		return this.item.getValue();
-	}
+	};
 	
 	Integer.prototype.setValue = function (val) {
 		if (typeof val !== Integer.type) {
 			throw new TypeError('type error');
 		}
 		this.item.setValue(val);
-	}
+	};
 	
 	Integer.prototype.getAttributes = function () {
 		return this.item.getAttributes();
-	}
+	};
 	
 	Integer.prototype.setAttributes = function (attr) {
 		this.item.setAttributes(attr);
-	}
+	};
 	
 	this_play.models.Integer = Integer;
 	

@@ -9,7 +9,7 @@
 		if (!(this instanceof Item)) {
 			return new Item();
 		}
-	};
+	}
 	
 	Item.prototype.value = undefined;
 	Item.prototype.attributes = {};

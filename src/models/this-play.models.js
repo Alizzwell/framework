@@ -17,12 +17,12 @@
 			return {
 				array: array,
 				type: constructor.type
-			}
+			};
 		}
 		
 		return {
 			toArray: toArray
-		}
+		};
 		
 	})();
 	

@@ -19,21 +19,21 @@
 		}
 
 		// TODO: To implement polymorphism
+		var model;
 		if (target.isArray) {
-			var model = this_play.models.toArray(
+			model = this_play.models.toArray(
 				this_play.models.Integer, target.length
 			);
 		}
 		else {
-			var model = new this_play.models.Integer();
+			model = new this_play.models.Integer();
 		}
 
 		this.targets[target.name] = this_play.controllers.create(model);
-		
 	};
 
 	Scheduler.prototype.step = function (step) {
-		for (name in step) {
+		for (var name in step) {
 			this.targets[name].update(step[name]);
 		}
 	};

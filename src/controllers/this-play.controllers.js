@@ -15,12 +15,12 @@
 		this.model.setValue(data);
 		var after = this.getValue();
 		
-		if (this.events["update"]) {
-			this.events["update"](before, after);
+		if (this.events.update) {
+			this.events.update(before, after);
 		}
 		
-		if (this.events["change"] && before !== after) {
-			this.events["change"](before, after);
+		if (this.events.change && before !== after) {
+			this.events.change(before, after);
 		}
 	};
 	
@@ -47,24 +47,26 @@
 			throw RangeError("data range error");
 		}
 		
-		for (var i = 0; i < data.length; i++) {
-			if (typeof data[i] !== this.model.type) {
+		var that = this;
+		data.forEach(function (d) {
+			if (typeof d !== that.model.type) {
 				throw TypeError("type error");
 			}
-		}
+		});
 		
 		var before = this.getValue();
-		for (var i = 0; i < data.length; i++) {
-			this.model.array[i].setValue(data[i]);
-		}
+		data.forEach(function (d, i) {
+			that.model.array[i].setValue(d);
+		});
+
 		var after = this.getValue();
 		
-		if (this.events["update"]) {
-			this.events["update"](before, after);
+		if (this.events.update) {
+			this.events.update(before, after);
 		}
 		
-		if (this.events["change"] && before !== after) {
-			this.events["change"](before, after);
+		if (this.events.change && before !== after) {
+			this.events.change(before, after);
 		}
 	};
 	
@@ -84,11 +86,11 @@
 			}
 			
 			return new Controller(model);
-		}
+		};
 		
 		return {
 			create: create
-		}
+		};
 		
 	})();
 	
