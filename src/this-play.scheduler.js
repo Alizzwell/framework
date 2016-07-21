@@ -5,41 +5,33 @@
 		throw 'this_play is not declared';
 	}
 
-	var Scheduler = function () {
-		this.targets = [];
-	};
+	var Scheduler = function (jsonData) {
+		var that = this;
+		var step = {
+			current: 1,
+			max: jsonData.steps.length
+		};
 
-	Scheduler.prototype.addTarget = function (target) {
-		if (Array.isArray(target)) {
-			var that = this;
-			target.forEach(function (item) {
-				that.addTarget(item);
-			});
-			return;
-		}
+		this.getStep = function () {
+			return step;
+		};
 
-		// TODO: To implement polymorphism
-		var model;
-		if (target.isArray) {
-			model = this_play.models.toArray(
-				this_play.models.Integer, target.length
-			);
-		}
-		else {
-			model = new this_play.models.Integer();
-		}
+		this.getLine = function () {
+			return jsonData.steps[step.current - 1].line;
+		};
 
-		this.targets[target.name] = this_play.controllers.create(model);
+		this.getTarget = function (name) {
+			var target = jsonData.targets[name];
+			target.data = jsonData.steps[step.current - 1].status[name];
+			return target;
+		};
 
-		if (target.init) {
-			this.targets[target.name].update(target.init);
-		}
-		
-	};
-
-	Scheduler.prototype.step = function (step) {
-		for (var name in step) {
-			this.targets[name].update(step[name]);
+		this.getTargets = function () {
+			var targets = {};
+			for (var name in jsonData.targets) {
+				targets[name] = that.getTarget(name);
+			}
+			return targets;
 		}
 	};
 

@@ -1,61 +1,43 @@
-var jsonData = {
-	targets: [
-		{ name: "A", type: "integer", isArray: true, length: 3 },
-		{ name: "B", type: "integer" }
-	],
-	steps: [
-		{ "A": [ 1, 0, 0 ], "B": 0 },
-		{ "A": [ 1, 2, 0 ], "B": 0 },
-		{ "A": [ 1, 2, 3 ], "B": 1 },
-		{ "A": [ 3, 2, 3 ], "B": 0 },
-		{ "A": [ 3, 2, 1 ], "B": 1 }
-	]
+const jsonData = {
+  "targets": { 
+  	"A": { "type": "int", "array": [ 4 ] } ,
+  	"B": { "type": "int" }
+  },
+  "steps": [
+  	{ "line": 12, "status": { "A": [ 0, 0, 0, 0 ], "B": 0 } },
+    { "line": 19, "status": { "A": [ 4, 3, 2, 1 ], "B": 0 } },
+    { "line": 19, "status": { "A": [ 3, 4, 2, 1 ], "B": 1 } },
+    { "line": 19, "status": { "A": [ 2, 4, 3, 1 ], "B": 2 } },
+    { "line": 19, "status": { "A": [ 4, 2, 3, 1 ], "B": 3 } },
+    { "line": 23, "status": { "A": [ 4, 3, 2, 1 ], "B": 4 } }
+  ]
 };
-
 
 QUnit.module('unit.scheduler.js', function (hooks) {
 
-	QUnit.test("scheduler simple test", function (assert) {
-		var scheduler = new this_play.Scheduler();
-		scheduler.addTarget(jsonData.targets);
+	QUnit.test("scheduler initialize test", function (assert) {
+		const scheduler = new this_play.Scheduler(jsonData);
+		
+		assert.equal(scheduler.getStep().current, 1);
+		assert.equal(scheduler.getStep().max, 6);
 
-		assert.ok(scheduler.targets['A']);
-		assert.ok(scheduler.targets['B']);
+		assert.equal(scheduler.getLine(), 12);
 
-		jsonData.steps.forEach(function (step) {
-			scheduler.step(step);
-			assert.deepEqual(scheduler.targets['A'].getValue(), step['A']);
-			assert.deepEqual(scheduler.targets['B'].getValue(), step['B']);
+		assert.equal(scheduler.getTarget('A').type, "int");
+		assert.deepEqual(scheduler.getTarget('A').array, [ 4 ]);
+		assert.deepEqual(scheduler.getTarget('A').data, [0, 0, 0, 0]);
+
+		assert.equal(scheduler.getTarget('B').type, "int");
+		assert.notOk(scheduler.getTarget('B').array);
+		assert.equal(scheduler.getTarget('B').data, 0);
+
+		assert.deepEqual(scheduler.getTargets(), {
+			"A": scheduler.getTarget('A'),
+			"B": scheduler.getTarget('B')
 		});
 	});
 	
-	QUnit.test("scheduler event listener test", function (assert) {
-		var scheduler = new this_play.Scheduler();
-		scheduler.addTarget(jsonData.targets);
 
-		assert.expect(18);
-		
-		scheduler.targets['A'].on('update', function (before, after) {
-			assert.ok(true, "update A " + after.toString());
-		});
-		
-		scheduler.targets['B'].on('update', function (before, after) {
-			assert.ok(true, "update B " + after.toString());
-		});
-		
-		scheduler.targets['A'].on('change', function (before, after) {
-			assert.notDeepEqual(before, after, before.toString() + " -> " + after.toString());
-		});
-		
-		scheduler.targets['B'].on('change', function (before, after) {
-			assert.notEqual(before, after, before + " -> " + after);
-		});
-		
-		jsonData.steps.forEach(function (step) {
-			scheduler.step(step);
-		});
-	});
-	
 });
 
 
