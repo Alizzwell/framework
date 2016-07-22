@@ -104,11 +104,11 @@ QUnit.module('unit.scheduler.js', function (hooks) {
 		scheduler.on('change', function (info) {
 			for (var name in info) {
 				assert.deepEqual(
-					info[name].before.data, jsonData.steps[i - 1].status[name],
-					`name: ${name}, before: ${info[name].before.data}`);
+					info[name].before, jsonData.steps[i - 1].status[name],
+					`name: ${name}, before: ${info[name].before}`);
 				assert.deepEqual(
-					info[name].after.data, jsonData.steps[i].status[name],
-					`name: ${name}, after: ${info[name].after.data}`);
+					info[name].data, jsonData.steps[i].status[name],
+					`name: ${name}, after: ${info[name].data}`);
 			}	
 		});
 

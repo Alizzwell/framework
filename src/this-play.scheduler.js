@@ -5,44 +5,67 @@
 		throw 'this_play is not declared';
 	}
 
-	const Scheduler = function (jsonData) {
+	var Scheduler = function (jsonData) {
 		var _that = this;
-		var _step = {
-			current: 1,
-			max: jsonData.steps.length
-		};
+		var _jsonData;
+		var _step = { current: 0, max: 0 };
 
-		this.events = [];
+		if (jsonData) {
+			bind(jsonData);
+		}
 
-		this.getStep = function () {
+		this.events = [];	// event callback methods
+
+		// public method
+		this.bind = bind;
+		this.unbind = unbind;
+		this.getStep = getStep;
+		this.getLine = getLine;
+		this.getTarget = getTarget;
+		this.getTargets = getTargets;
+		this.step = step;
+
+		function bind(jsonData) {
+			_jsonData = jsonData;
+			_step.current = 1;
+			_step.max = _jsonData.steps.length;
+		}
+
+		function unbind() {
+			_jsonData = undefined;
+			_step.current = 0;
+			_step.max = 0;
+		}
+
+		function getStep() {
 			return _step;
-		};
+		}
 
-		this.getLine = function () {
-			return jsonData.steps[_step.current - 1].line;
-		};
+		function getLine() {
+			return _jsonData.steps[_step.current - 1].line;
+		}
 
-		this.getTarget = function (name, step) {
-			var step = step || _step.current;
+		function getTarget(name, s) {
+			s = s || _step.current;
 			
-			if (step < 1 || step > _step.max) {
+			if (s < 1 || s > _step.max) {
 				return undefiend;
 			}
 
-			var target = jsonData.targets[name];
-			target.data = jsonData.steps[step - 1].status[name];
-			return target;
-		};
+			var target = _jsonData.targets[name];
+			target.data = _jsonData.steps[s - 1].status[name];
+			return JSON.parse(JSON.stringify(target));
+		}
 
-		this.getTargets = function (step) {
+		function getTargets(s) {
 			var targets = {};
-			for (var name in jsonData.targets) {
-				targets[name] = _that.getTarget(name, step);
+			for (var name in _jsonData.targets) {
+				targets[name] = _that.getTarget(name, s);
 			}
-			return JSON.parse(JSON.stringify(targets));
-		};
+			return targets;
+		}
 
-		this.step = function () {
+		function step() {
 			if (_step.current >= _step.max) {
 				_step.current = _step.max;
 				return;
@@ -50,26 +73,28 @@
 
 			_step.current++;
 
-			if (this.events.step) {
-				this.events.step();
+			if (_that.events.step) {
+				_that.events.step();
 			}
 
-			if (this.events.change) {
-				var before = _that.getTargets(_step.current - 1);
-				var after = _that.getTargets(_step.current);
+			if (_that.events.change) {
 				var info = {};
-				for (var name in jsonData.targets) {
-					if (before[name].data.toString() != 
-						after[name].data.toString()) {
-						info[name] = {
-							before: before[name],
-							after: after[name]
-						};
+				var isChange = false;
+				for (var name in _jsonData.targets) {
+					var before = _that.getTarget(name, _step.current - 1);
+					var after = _that.getTarget(name);
+					if (before.data.toString() != after.data.toString()) {
+						isChange = true;
+						info[name] = after;
+						info[name].before = before.data;
 					}
 				}
-				this.events.change(info);
+
+				if (isChange) {
+					_that.events.change(info);
+				}
 			}
-		};
+		}
 	};
 
 	Scheduler.prototype.on = function (event, callback) {
