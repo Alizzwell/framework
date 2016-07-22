@@ -3,17 +3,6 @@ module.exports = function (grunt) {
 		// Core
 		'src/this-play.core.js',
 
-		// classes
-		'src/classes/this-play.classes.item.js',
-		
-		// models
-		'src/models/this-play.models.js',
-		'src/models/this-play.models.integer.js',
-
-		// controllers
-		'src/controllers/this-play.controllers.js',
-
-		// scheduler
 		'src/this-play.scheduler.js'
 	]
 
@@ -29,9 +18,11 @@ module.exports = function (grunt) {
 			}
 		},
 		uglify: {
+			/*
 			options: {
 				banner: '/* <%= grunt.template.today("yyyy-mm-dd") %> /'
 			},
+			*/
 			build: {
 				src: 'build/this-play.js',
 				dest: 'build/this-play.min.js'
