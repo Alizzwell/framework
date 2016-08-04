@@ -68,6 +68,11 @@
 		function step() {
 			if (_step.current >= _step.max) {
 				_step.current = _step.max;
+
+				if (_that.events.end) {
+					_that.events.end();
+				}
+
 				return;
 			}
 
